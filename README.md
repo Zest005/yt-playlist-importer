@@ -1,6 +1,6 @@
-## YouTube Playlist Importer
-# yt-playlist-importer
-EN
+# YouTube Playlist Importer
+## yt-playlist-importer
+### EN
 It migrates playlists from an old YouTube account to a new one.
 
 YouTube/Google does not provide a built-in playlist import tool.
@@ -27,7 +27,7 @@ language buttons in the top-right corner of the window. The
 language is auto-detected from the browser and remembered
 between runs.
 
-RU
+### RU
 Переносит плейлисты со старого YouTube-аккаунта в новый.
 
 YouTube/Google не предоставляет встроенного инструмента импорта
@@ -52,7 +52,8 @@ Takeout, создаёт плейлисты в текущем (целевом) а
 Интерфейс на трёх языках: EN / RU / UA. Выбор языка — кнопками
 в правом верхнем углу окна. Язык автоматически определяется по
 языку браузера и запоминается между запусками.
-UA
+
+### UA
 Переносить плейлисти зі старого YouTube-акаунту на новий.
 
 YouTube/Google не надає вбудованого інструмента імпорту
