@@ -1,80 +1,70 @@
 # YouTube Playlist Importer
-## yt-playlist-importer
-### EN
-It migrates playlists from an old YouTube account to a new one.
 
-YouTube/Google does not provide a built-in playlist import tool.
-If you want to move your playlists to a new account, the only
-official path is to export them via Google Takeout as CSV files
-and then re-create everything by hand.
+A single-file browser script that imports playlists from an old YouTube account to a new one, using CSV files exported via Google Takeout. Runs in DevTools — no API keys, no OAuth, no installation.
 
-This script automates the "by hand" part. It takes Takeout CSVs,
-creates playlists in your current (target) YouTube account, and
-fills them with videos — using the same internal API that the
-youtube.com page itself uses.
+Interface available in **EN / RU / UA** (auto-detected, switchable on the fly).
 
-No need for:
-  • API keys or registering an app in Google Cloud
-  • OAuth tokens
-  • installing anything
-  • uploading data to third-party services
+**Language:** [English](#english) · [Русский](#русский) · [Українська](#українська)
 
-Everything runs locally in the browser, on the cookies of your
-current YouTube session.
+---
 
-UI is available in three languages: EN / RU / UA. Use the
-language buttons in the top-right corner of the window. The
-language is auto-detected from the browser and remembered
-between runs.
+## English
 
-### RU
-Переносит плейлисты со старого YouTube-аккаунта в новый.
+### Quick start
 
-YouTube/Google не предоставляет встроенного инструмента импорта
-плейлистов. Если вы хотите перенести свои плейлисты на новый
-аккаунт, единственный официальный способ — выгрузить их через
-Google Takeout в виде CSV-файлов, а дальше создавать всё руками.
+1. **Download [`import-playlists.js`](import-playlists.js)** — the script itself.
+2. **Download [`Readme.EN.txt`](Readme.EN.txt)** — the full manual with detailed instructions, FAQ, troubleshooting, and technical notes. Open it in any text editor.
+3. Follow the steps in `Readme.EN.txt`. In short: sign into your new YouTube account → open `https://www.youtube.com/` → press F12 → paste the contents of `import-playlists.js` into the Console → a modal will appear where you upload your CSV files from Google Takeout.
 
-Этот скрипт автоматизирует «дальше». Он берёт CSV-файлы из
-Takeout, создаёт плейлисты в текущем (целевом) аккаунте YouTube
-и наполняет их видео — через тот же внутренний API, которым
-пользуется сам сайт youtube.com.
+### Files in this repository
 
-Не требует:
-  • API-ключей или регистрации приложения в Google Cloud
-  • OAuth-токенов
-  • установки чего-либо
-  • загрузки данных на сторонние сервисы
+| File | Purpose |
+|------|---------|
+| [`import-playlists.js`](import-playlists.js) | The script. Copy-paste into the browser console. |
+| [`Readme.EN.txt`](Readme.EN.txt) | Full manual — English |
+| [`Readme.RU.txt`](Readme.RU.txt) | Full manual — Russian |
+| [`Readme.UA.txt`](Readme.UA.txt) | Full manual — Ukrainian |
 
-Всё работает локально в браузере, на cookie вашей текущей
-сессии YouTube.
+---
 
-Интерфейс на трёх языках: EN / RU / UA. Выбор языка — кнопками
-в правом верхнем углу окна. Язык автоматически определяется по
-языку браузера и запоминается между запусками.
+## Русский
 
-### UA
-Переносить плейлисти зі старого YouTube-акаунту на новий.
+### Быстрый старт
 
-YouTube/Google не надає вбудованого інструмента імпорту
-плейлистів. Якщо ви хочете перенести свої плейлисти на новий
-акаунт, єдиний офіційний спосіб — вивантажити їх через Google
-Takeout у вигляді CSV-файлів, а далі створювати все вручну.
+1. **Скачайте [`import-playlists.js`](import-playlists.js)** — сам скрипт.
+2. **Скачайте [`Readme.RU.txt`](Readme.RU.txt)** — полную инструкцию с подробными шагами, FAQ, решением проблем и техническими деталями. Откройте в любом текстовом редакторе.
+3. Дальше — по инструкции из `Readme.RU.txt`. Кратко: войдите в новый YouTube-аккаунт → откройте `https://www.youtube.com/` → нажмите F12 → вставьте содержимое `import-playlists.js` в Console → появится окно, в которое нужно загрузить CSV-файлы из Google Takeout.
 
-Цей скрипт автоматизує «далі». Він бере CSV-файли з Takeout,
-створює плейлисти у поточному (цільовому) акаунті YouTube і
-наповнює їх відео — через той самий внутрішній API, яким
-користується сам сайт youtube.com.
+### Файлы в репозитории
 
-Не потребує:
-  • API-ключів чи реєстрації застосунку у Google Cloud
-  • OAuth-токенів
-  • встановлення чого-небудь
-  • завантаження даних на сторонні сервіси
+| Файл | Назначение |
+|------|------------|
+| [`import-playlists.js`](import-playlists.js) | Сам скрипт. Копируется в консоль браузера. |
+| [`Readme.RU.txt`](Readme.RU.txt) | Полная инструкция — русский |
+| [`Readme.EN.txt`](Readme.EN.txt) | Полная инструкция — английский |
+| [`Readme.UA.txt`](Readme.UA.txt) | Полная инструкция — украинский |
 
-Усе працює локально у браузері, на cookie вашої поточної сесії
-YouTube.
+---
 
-Інтерфейс трьома мовами: EN / RU / UA. Вибір мови — кнопками
-у правому верхньому куті вікна. Мова автоматично визначається
-за мовою браузера і запам'ятовується між запусками.
+## Українська
+
+### Швидкий старт
+
+1. **Завантажте [`import-playlists.js`](import-playlists.js)** — сам скрипт.
+2. **Завантажте [`Readme.UA.txt`](Readme.UA.txt)** — повну інструкцію з детальними кроками, FAQ, вирішенням проблем і технічними деталями. Відкрийте у будь-якому текстовому редакторі.
+3. Далі — за інструкцією з `Readme.UA.txt`. Коротко: увійдіть у новий YouTube-акаунт → відкрийте `https://www.youtube.com/` → натисніть F12 → вставте вміст `import-playlists.js` у Console → з'явиться вікно, в яке потрібно завантажити CSV-файли з Google Takeout.
+
+### Файли у репозиторії
+
+| Файл | Призначення |
+|------|-------------|
+| [`import-playlists.js`](import-playlists.js) | Сам скрипт. Копіюється у консоль браузера. |
+| [`Readme.UA.txt`](Readme.UA.txt) | Повна інструкція — українська |
+| [`Readme.EN.txt`](Readme.EN.txt) | Повна інструкція — англійська |
+| [`Readme.RU.txt`](Readme.RU.txt) | Повна інструкція — російська |
+
+---
+
+## Disclaimer
+
+Use at your own risk. The author is not responsible for any blocking, limitation, or other sanctions from YouTube / Google against your account, nor for any other consequences of using this script. See the language-specific Readme files for full details.
