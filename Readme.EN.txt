@@ -7,7 +7,7 @@
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  WHAT THIS SCRIPT IS FOR                                         │
+│  WHAT THIS SCRIPT IS FOR                                         						   │
 └─────────────────────────────────────────────────────────────────┘
 
 It migrates playlists from an old YouTube account to a new one.
@@ -38,7 +38,7 @@ between runs.
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  FEATURES                                                        │
+│  FEATURES                                                        						   │
 └─────────────────────────────────────────────────────────────────┘
 
   • Upload one or many CSV files via drag-and-drop or file picker.
@@ -47,6 +47,12 @@ between runs.
   • Auto-recognition of "Watch later" / "Смотреть позже" /
     "Дивитися пізніше" — such files go to the system Watch Later
     instead of creating a same-named regular playlist.
+  • Optional "Clear Watch Later before import" checkbox —
+    removes ALL existing videos from WL page-by-page, then
+    fills it from your CSV.
+  • For Watch Later, videos are added in REVERSE CSV order so
+    the new WL displays in the same order as the original
+    (see the "Watch Later — notes" section below).
   • Privacy of created playlists:
         — Private (only you)
         — Unlisted (with link)
@@ -76,7 +82,7 @@ between runs.
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  WHERE TO GET THE CSV FILES                                      │
+│  WHERE TO GET THE CSV FILES                                      						   │
 └─────────────────────────────────────────────────────────────────┘
 
   1. Go to https://takeout.google.com signed into the OLD account
@@ -103,7 +109,7 @@ These CSV files are what you feed to the script.
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  CSV FORMAT AND PLAYLIST NAME                                    │
+│  CSV FORMAT AND PLAYLIST NAME                                    						   │
 └─────────────────────────────────────────────────────────────────┘
 
 The script expects CSVs in Google Takeout format:
@@ -130,7 +136,7 @@ Watch Later instead of creating a new playlist with that name.
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  HOW TO RUN                                                      │
+│  HOW TO RUN                                                      						   │
 └─────────────────────────────────────────────────────────────────┘
 
   1. Sign into the new YouTube account (the one you are moving TO).
@@ -158,14 +164,49 @@ Watch Later instead of creating a new playlist with that name.
      needed. Drag CSV files onto it or click the upload area
      and pick them.
 
-  8. Tune the delay and privacy.
+  8. Tune the delay, privacy, and — if needed — enable
+     "Clear Watch Later before importing"
+     (see "Watch Later — notes" below).
 
   9. Click "Start import" and wait until it finishes. The window
      shows progress, log, and at the end — the final report.
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  HOW TO CHOOSE THE DELAY                                         │
+│  WATCH LATER — NOTES                                             					   │
+└─────────────────────────────────────────────────────────────────┘
+
+Watch Later is a system playlist with two quirks worth knowing.
+
+VIDEO ORDER
+  Google Takeout exports Watch Later in display order (newest at
+  the top). YouTube sorts WL by added-date (most recent at the top).
+  So the script automatically adds CSV videos in REVERSE order: the
+  oldest CSV entry first, the newest last. That way the new Watch
+  Later displays in the same order as the original.
+
+  Regular playlists are unaffected — their CSV order is preserved
+  as-is.
+
+CLEARING BEFORE IMPORT
+  In the settings there is a checkbox "Clear Watch Later before
+  importing". When enabled, the script first deletes ALL videos
+  currently in Watch Later, then adds the CSV videos. Handy if a
+  previous partial import left clutter in WL and you want a clean
+  start.
+
+  Removal is page-based (YouTube serves ~100 videos per page):
+  the script reads one page, removes everything on it, fetches
+  again, and repeats until WL comes back empty. The log shows
+  the page number and a running total of removed videos.
+
+  Without the checkbox, the script just adds CSV videos on top
+  of whatever is already there (YouTube itself prevents duplicates
+  inside WL).
+
+
+┌─────────────────────────────────────────────────────────────────┐
+│  HOW TO CHOOSE THE DELAY                                         						   │
 └─────────────────────────────────────────────────────────────────┘
 
 YouTube does not publish official rate limits, so recommendations
@@ -192,13 +233,13 @@ In extremely rare cases mass automated requests can cause an
 account to be blocked.
 
 ╔══════════════════════════════════════════════════════════════╗
-║  Use at your own risk. For your main account use a 10–15     ║
-║  second delay and don't try to import everything in one go.  ║
+║  Use at your own risk. For your main account use a 10–15     						   ║
+║  second delay and don't try to import everything in one go.  						   ║
 ╚══════════════════════════════════════════════════════════════╝
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  WHAT TO DO ABOUT FAILED VIDEOS                                  │
+│  WHAT TO DO ABOUT FAILED VIDEOS                                  						   │
 └─────────────────────────────────────────────────────────────────┘
 
 The report splits failed videos into two categories:
@@ -227,7 +268,7 @@ The report has buttons:
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  FAQ                                                             │
+│  FAQ                                                             						   │
 └─────────────────────────────────────────────────────────────────┘
 
 ? Is this safe for the account?
@@ -243,14 +284,34 @@ The report has buttons:
   duplicates from the CSV beforehand.
 
 ? Can I import into an EXISTING playlist?
-  Not in this version. The script always creates a new playlist
-  with the name from the file. Watch Later is the exception
-  (it's the system WL playlist, always appended to).
+  Not in this version. The script ALWAYS creates a new playlist
+  with the name from the file, even if one with that name already
+  exists. If a previous run already created a playlist with that
+  name, delete it manually before re-running or you'll end up with
+  a duplicate. Watch Later is the exception (it's the system WL
+  playlist, always appended to; or enable "Clear Watch Later
+  before importing" for a clean start).
 
 ? If I stop mid-import — will it resume next time?
-  No, the script creates playlists fresh each run. Before re-running,
-  delete the partially created playlists manually or rename the
-  files.
+  No, the script does not track state between runs. Each run starts
+  fresh and creates new playlists. Before re-running:
+    — for regular playlists: delete the partially created ones
+      manually (otherwise you'll get duplicates);
+    — for Watch Later: enable the "Clear Watch Later before
+      importing" checkbox and the script will clean up for you.
+
+? What does the "Clear Watch Later before importing" checkbox do?
+  Before adding CSV videos to Watch Later, the script removes ALL
+  videos currently in it. Regular playlists are not affected. Use
+  it when a previous partial import left clutter in WL and you
+  want a clean start.
+
+? Why are Watch Later videos added in reverse CSV order?
+  By design. Google Takeout exports WL in display order (newest
+  first), while YouTube sorts WL by added-date. If the script
+  added in CSV order, the original's newest video would end up at
+  the bottom. The reverse ensures the new WL looks like the original.
+  Regular playlists are unaffected.
 
 ? Where are results after I close the modal?
   In the  window.__importResult  variable in the console. Available
@@ -289,7 +350,7 @@ The report has buttons:
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  TECHNICAL DETAILS                                               │
+│  TECHNICAL DETAILS                                               						   │
 └─────────────────────────────────────────────────────────────────┘
 
 YouTube InnerTube API endpoints used by the script:
@@ -298,7 +359,13 @@ YouTube InnerTube API endpoints used by the script:
        — create a new playlist (with one initial video)
 
   POST /youtubei/v1/browse/edit_playlist
-       — add videos to a playlist (including the system WL)
+       — add (ACTION_ADD_VIDEO) or remove
+         (ACTION_REMOVE_VIDEO_BY_VIDEO_ID) videos in a playlist,
+         including the system WL
+
+  POST /youtubei/v1/browse  (browseId: VLWL)
+       — read Watch Later contents
+         (only used when "Clear Watch Later" is enabled)
 
 Authentication:
   SAPISIDHASH = SHA-1(timestamp + ' ' + SAPISID + ' ' + origin)
@@ -319,7 +386,7 @@ Compatibility with YouTube's Trusted Types CSP:
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  LICENSE AND DISCLAIMER                                          │
+│  LICENSE AND DISCLAIMER                                          						   │
 └─────────────────────────────────────────────────────────────────┘
 
 Do whatever you want with this script.
