@@ -138,6 +138,15 @@
       time_s: 's',
       btn_remove_file: 'Remove file',
       btn_new_import: '↺ New import',
+      clear_wl_label: 'Clear "Watch Later" before importing',
+      clear_wl_hint: 'Removes ALL current videos from Watch Later, then adds the ones from your CSV. Has no effect on regular playlists.',
+      log_wl_clearing_start: '  🗑 clearing Watch Later page by page…',
+      log_wl_page: '    → page {0}: {1} video(s) found (removed so far: {2})',
+      log_remove_batch: '    − batch {0}/{1}: −{2} video(s)',
+      log_remove_failed: '    ✗ remove batch {0} failed: {1}',
+      log_wl_cleared: '  ✓ Watch Later cleared ({0} removed in total)',
+      log_clear_failed: '  ✗ could not clear Watch Later: {0}',
+      log_clear_stuck: '  ⚠ could not remove any videos on this page, stopping clear',
     },
 
     ru: {
@@ -244,6 +253,15 @@
       time_s: 'с',
       btn_remove_file: 'Удалить файл',
       btn_new_import: '↺ Новый импорт',
+      clear_wl_label: 'Очистить «Смотреть позже» перед импортом',
+      clear_wl_hint: 'Удалит ВСЕ текущие видео из «Смотреть позже», затем добавит видео из CSV. На обычные плейлисты не влияет.',
+      log_wl_clearing_start: '  🗑 очищаю «Смотреть позже» постранично…',
+      log_wl_page: '    → страница {0}: найдено {1} видео (удалено всего: {2})',
+      log_remove_batch: '    − батч {0}/{1}: −{2} видео',
+      log_remove_failed: '    ✗ батч удаления {0} не прошёл: {1}',
+      log_wl_cleared: '  ✓ «Смотреть позже» очищен (всего удалено: {0})',
+      log_clear_failed: '  ✗ не удалось очистить «Смотреть позже»: {0}',
+      log_clear_stuck: '  ⚠ не получается удалить видео с этой страницы, прекращаю очистку',
     },
 
     uk: {
@@ -350,6 +368,16 @@
       time_s: 'с',
       btn_remove_file: 'Видалити файл',
       btn_new_import: '↺ Новий імпорт',
+      // Clear Watch Later option
+      clear_wl_label: 'Очистити «Дивитися пізніше» перед імпортом',
+      clear_wl_hint: 'Видалить УСІ поточні відео з «Дивитися пізніше», потім додасть відео з CSV. На звичайні плейлисти не впливає.',
+      log_wl_clearing_start: '  🗑 очищую «Дивитися пізніше» посторінково…',
+      log_wl_page: '    → сторінка {0}: знайдено {1} відео (видалено всього: {2})',
+      log_remove_batch: '    − батч {0}/{1}: −{2} відео',
+      log_remove_failed: '    ✗ батч видалення {0} не пройшов: {1}',
+      log_wl_cleared: '  ✓ «Дивитися пізніше» очищено (всього видалено: {0})',
+      log_clear_failed: '  ✗ не вдалося очистити «Дивитися пізніше»: {0}',
+      log_clear_stuck: '  ⚠ не виходить видалити відео з цієї сторінки, припиняю очистку',
     },
   };
 
@@ -440,6 +468,27 @@
   async function addBatch(playlistId, videoIds) {
     const actions = videoIds.map(v => ({ action: 'ACTION_ADD_VIDEO', addedVideoId: v }));
     return await api('browse/edit_playlist', { playlistId, actions });
+  }
+
+  async function removeBatch(playlistId, videoIds) {
+    const actions = videoIds.map(v => ({ action: 'ACTION_REMOVE_VIDEO_BY_VIDEO_ID', removedVideoId: v }));
+    return await api('browse/edit_playlist', { playlistId, actions });
+  }
+
+  // ---------- InnerTube response walkers ----------
+  function walkTree(obj, cb) {
+    if (!obj || typeof obj !== 'object') return;
+    cb(obj);
+    if (Array.isArray(obj)) for (const x of obj) walkTree(x, cb);
+    else for (const k in obj) walkTree(obj[k], cb);
+  }
+
+  function extractVideoIds(resp, set) {
+    walkTree(resp, node => {
+      if (node && node.playlistVideoRenderer && node.playlistVideoRenderer.videoId) {
+        set.add(node.playlistVideoRenderer.videoId);
+      }
+    });
   }
 
   function chunk(arr, n) { const out = []; for (let i = 0; i < arr.length; i += n) out.push(arr.slice(i, i + n)); return out; }
@@ -542,6 +591,11 @@
     .yti-preset button { background: #2a2a2a; border: 1px solid #444; color: #ddd; padding: 4px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; }
     .yti-preset button:hover { background: #383838; }
     .yti-preset button.active { background: #4a8bf5; border-color: #4a8bf5; color: #fff; }
+    .yti-checkbox { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 13px; color: #ddd; user-select: none; flex: 1; padding: 8px 12px; background: #2a2a2a; border-radius: 6px; border: 1px solid #3a3a3a; transition: border-color .1s; }
+    .yti-checkbox:hover { border-color: #555; }
+    .yti-checkbox input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; accent-color: #4a8bf5; flex: 0 0 auto; margin-top: 1px; }
+    .yti-checkbox-text { display: flex; flex-direction: column; gap: 2px; }
+    .yti-checkbox-text .hint { color: #888; font-size: 11px; line-height: 1.4; }
     .yti-footer { padding: 14px 22px; border-top: 1px solid #383838; display: flex; justify-content: flex-end; gap: 10px; flex-shrink: 0; }
     .yti-btn { padding: 8px 20px; border-radius: 4px; border: none; cursor: pointer; font-size: 13px; font-weight: 500; }
     .yti-btn-primary { background: #4a8bf5; color: #fff; }
@@ -561,7 +615,7 @@
     .yti-log .err { color: #ef5350; }
     .yti-log .info { color: #90caf9; }
     .yti-log .pl { color: #ce93d8; font-weight: bold; margin-top: 8px; border-top: 1px dashed #333; padding-top: 4px; }
-    .yti-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+    .yti-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 14px; }
     .yti-summary-card { background: #2a2a2a; padding: 14px; border-radius: 6px; text-align: center; }
     .yti-summary-card .num { font-size: 28px; font-weight: 500; line-height: 1.1; }
     .yti-summary-card .lbl { font-size: 11px; color: #aaa; text-transform: uppercase; margin-top: 4px; letter-spacing: 0.05em; }
@@ -591,11 +645,10 @@
   let parsed = [];
   let running = false, stopRequested = false;
 
-  // Live element refs — re-queried after language rebuild of setup stage
   let elTitle, elClose, elLangBtns;
   let stageSetup, stageRun, stageDone;
   let elFile, elDrop, elFiles;
-  let elDelay, elBatch, elPrivacy, elPreset;
+  let elDelay, elBatch, elPrivacy, elPreset, elClearWL;
   let elBar, elPct, elCounts, elEta, elCurrent, elLog;
   let elCancel, elStart;
 
@@ -661,6 +714,15 @@
             h('option', { value: 'PRIVATE', text: t('privacy_private') }),
             h('option', { value: 'UNLISTED', text: t('privacy_unlisted') }),
             h('option', { value: 'PUBLIC', text: t('privacy_public') }),
+          ]),
+        ]),
+        h('div', { class: 'yti-row' }, [
+          h('label', { class: 'yti-checkbox' }, [
+            h('input', { type: 'checkbox', id: 'yti-clear-wl' }),
+            h('span', { class: 'yti-checkbox-text' }, [
+              h('span', { text: t('clear_wl_label') }),
+              h('span', { class: 'hint', text: t('clear_wl_hint') }),
+            ]),
           ]),
         ]),
       ]),
@@ -731,6 +793,7 @@
     elBatch = $('#yti-batch', root);
     elPrivacy = $('#yti-privacy', root);
     elPreset = $('#yti-preset', root);
+    elClearWL = $('#yti-clear-wl', root);
     elBar = $('#yti-bar', root);
     elPct = $('#yti-pct', root);
     elCounts = $('#yti-counts', root);
@@ -775,6 +838,7 @@
     const delay = elDelay ? elDelay.value : '700';
     const batch = elBatch ? elBatch.value : '20';
     const privacy = elPrivacy ? elPrivacy.value : 'PRIVATE';
+    const clearWL = elClearWL ? elClearWL.checked : false;
 
     currentLang = lang;
     try { localStorage.setItem('yt-importer-lang', lang); } catch {}
@@ -794,6 +858,7 @@
     elBatch = $('#yti-batch', root);
     elPrivacy = $('#yti-privacy', root);
     elPreset = $('#yti-preset', root);
+    elClearWL = $('#yti-clear-wl', root);
     elBar = $('#yti-bar', root);
     elPct = $('#yti-pct', root);
     elCounts = $('#yti-counts', root);
@@ -804,6 +869,7 @@
     elDelay.value = delay;
     elBatch.value = batch;
     elPrivacy.value = privacy;
+    if (elClearWL) elClearWL.checked = clearWL;
     elPreset.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.v === delay));
 
     wireSetup();
@@ -872,7 +938,7 @@
     let total = 0;
     for (const p of parsed) {
       const wl = isWatchLater(p.name);
-      const item = p; // capture for closure
+      const item = p;
       const row = h('div', { class: 'yti-file-row' }, [
         h('span', null, [
           (wl ? '⏱ ' : '📁 ') + p.name,
@@ -923,6 +989,7 @@
     const delay = Math.max(100, parseInt(elDelay.value, 10) || 700);
     const batchSize = Math.max(1, Math.min(50, parseInt(elBatch.value, 10) || 20));
     const privacy = elPrivacy.value;
+    const clearWL = !!(elClearWL && elClearWL.checked);
 
     if (delay < 1000 && parsed.some(p => p.videos.length > 200)) {
       if (!confirm(t('confirm_fast'))) return;
@@ -942,7 +1009,7 @@
     const plan = parsed
       .map(p => {
         const wl = isWatchLater(p.name);
-        const v = p.videos.slice();
+        const v = wl ? p.videos.slice().reverse() : p.videos.slice();
         const requests = wl ? Math.max(1, Math.ceil(v.length / batchSize)) : 1 + Math.ceil(Math.max(0, v.length - 1) / batchSize);
         return { name: p.name, wl, videos: v, requests };
       })
@@ -956,7 +1023,10 @@
 
     const result = { perPlaylist: {}, totalAdded: 0, totalUnavailable: 0, totalOther: 0 };
     const ensure = name => {
-      if (!result.perPlaylist[name]) result.perPlaylist[name] = { added: [], failedUnavailable: [], failedOther: [], playlistId: null, created: false, isWL: false };
+      if (!result.perPlaylist[name]) result.perPlaylist[name] = {
+        added: [], failedUnavailable: [], failedOther: [],
+        playlistId: null, created: false, isWL: false,
+      };
       return result.perPlaylist[name];
     };
 
@@ -995,6 +1065,63 @@
       if (pl.wl) {
         playlistId = 'WL';
         logLine(t('log_wl_target'), 'info');
+
+        if (clearWL) {
+          try {
+            logLine(t('log_wl_clearing_start'), 'warn');
+            let removedTotal = 0;
+            let pageNum = 0;
+            const maxPages = 120;
+            while (pageNum++ < maxPages) {
+              if (stopRequested) break;
+
+              let r;
+              try {
+                r = await timed(() => api('browse', { browseId: 'VL' + playlistId }));
+              } catch (e) {
+                logLine(t('log_clear_failed', e.message || e), 'err');
+                break;
+              }
+              const pageIds = new Set();
+              extractVideoIds(r, pageIds);
+
+              if (pageIds.size === 0) break;
+
+              const arr = Array.from(pageIds);
+              logLine(t('log_wl_page', pageNum, arr.length, removedTotal), 'info');
+
+              const clearBatches = chunk(arr, batchSize);
+              totalRequests += clearBatches.length + 1;
+              doneRequests += 1;
+              let pageRemoved = 0;
+              for (let i = 0; i < clearBatches.length; i++) {
+                if (stopRequested) break;
+                const b = clearBatches[i];
+                try {
+                  await timed(() => removeBatch(playlistId, b));
+                  pageRemoved += b.length;
+                  removedTotal += b.length;
+                  logLine(t('log_remove_batch', i + 1, clearBatches.length, b.length), 'ok');
+                } catch (e) {
+                  logLine(t('log_remove_failed', i + 1, e.message || e), 'warn');
+                }
+                doneRequests++;
+                updateProgress();
+                await sleep(delay);
+              }
+
+              if (pageRemoved === 0) {
+                logLine(t('log_clear_stuck'), 'warn');
+                break;
+              }
+
+              await sleep(delay);
+            }
+            logLine(t('log_wl_cleared', removedTotal), 'ok');
+          } catch (e) {
+            logLine(t('log_clear_failed', e.message || e), 'err');
+          }
+        }
       } else {
         while (!playlistId && startIdx < pl.videos.length && !stopRequested) {
           const vid = pl.videos[startIdx];
