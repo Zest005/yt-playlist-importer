@@ -7,7 +7,7 @@
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  WHAT THIS SCRIPT IS FOR                                         						   │
+│  WHAT THIS SCRIPT IS FOR                                        │
 └─────────────────────────────────────────────────────────────────┘
 
 It migrates playlists from an old YouTube account to a new one.
@@ -38,7 +38,7 @@ between runs.
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  FEATURES                                                        						   │
+│  FEATURES                                                       │
 └─────────────────────────────────────────────────────────────────┘
 
   • Upload one or many CSV files via drag-and-drop or file picker.
@@ -82,7 +82,7 @@ between runs.
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  WHERE TO GET THE CSV FILES                                      						   │
+│  WHERE TO GET THE CSV FILES                                     │
 └─────────────────────────────────────────────────────────────────┘
 
   1. Go to https://takeout.google.com signed into the OLD account
@@ -109,7 +109,7 @@ These CSV files are what you feed to the script.
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  CSV FORMAT AND PLAYLIST NAME                                    						   │
+│  CSV FORMAT AND PLAYLIST NAME                                   │
 └─────────────────────────────────────────────────────────────────┘
 
 The script expects CSVs in Google Takeout format:
@@ -136,7 +136,7 @@ Watch Later instead of creating a new playlist with that name.
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  HOW TO RUN                                                      						   │
+│  HOW TO RUN                                                     │
 └─────────────────────────────────────────────────────────────────┘
 
   1. Sign into the new YouTube account (the one you are moving TO).
@@ -173,7 +173,7 @@ Watch Later instead of creating a new playlist with that name.
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  WATCH LATER — NOTES                                             					   │
+│  WATCH LATER — NOTES                                            │
 └─────────────────────────────────────────────────────────────────┘
 
 Watch Later is a system playlist with two quirks worth knowing.
@@ -206,7 +206,7 @@ CLEARING BEFORE IMPORT
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  HOW TO CHOOSE THE DELAY                                         						   │
+│  HOW TO CHOOSE THE DELAY                                        │
 └─────────────────────────────────────────────────────────────────┘
 
 YouTube does not publish official rate limits, so recommendations
@@ -233,13 +233,13 @@ In extremely rare cases mass automated requests can cause an
 account to be blocked.
 
 ╔══════════════════════════════════════════════════════════════╗
-║  Use at your own risk. For your main account use a 10–15     						   ║
-║  second delay and don't try to import everything in one go.  						   ║
+║  Use at your own risk. For your main account use a 10–15     ║
+║  second delay and don't try to import everything in one go.  ║
 ╚══════════════════════════════════════════════════════════════╝
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  WHAT TO DO ABOUT FAILED VIDEOS                                  						   │
+│  WHAT TO DO ABOUT FAILED VIDEOS                              		│
 └─────────────────────────────────────────────────────────────────┘
 
 The report splits failed videos into two categories:
@@ -268,7 +268,7 @@ The report has buttons:
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  FAQ                                                             						   │
+│  FAQ                                                            │
 └─────────────────────────────────────────────────────────────────┘
 
 ? Is this safe for the account?
@@ -350,7 +350,7 @@ The report has buttons:
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  TECHNICAL DETAILS                                               						   │
+│  TECHNICAL DETAILS                                              │
 └─────────────────────────────────────────────────────────────────┘
 
 YouTube InnerTube API endpoints used by the script:
@@ -386,7 +386,7 @@ Compatibility with YouTube's Trusted Types CSP:
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│  LICENSE AND DISCLAIMER                                          						   │
+│  LICENSE AND DISCLAIMER                                         │
 └─────────────────────────────────────────────────────────────────┘
 
 Do whatever you want with this script.
