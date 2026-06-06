@@ -368,7 +368,6 @@
       time_s: 'с',
       btn_remove_file: 'Видалити файл',
       btn_new_import: '↺ Новий імпорт',
-      // Clear Watch Later option
       clear_wl_label: 'Очистити «Дивитися пізніше» перед імпортом',
       clear_wl_hint: 'Видалить УСІ поточні відео з «Дивитися пізніше», потім додасть відео з CSV. На звичайні плейлисти не впливає.',
       log_wl_clearing_start: '  🗑 очищую «Дивитися пізніше» посторінково…',
@@ -471,6 +470,7 @@
   }
 
   async function removeBatch(playlistId, videoIds) {
+    // ACTION_REMOVE_VIDEO_BY_VIDEO_ID removes by videoId (no setVideoId needed).
     const actions = videoIds.map(v => ({ action: 'ACTION_REMOVE_VIDEO_BY_VIDEO_ID', removedVideoId: v }));
     return await api('browse/edit_playlist', { playlistId, actions });
   }
@@ -938,7 +938,7 @@
     let total = 0;
     for (const p of parsed) {
       const wl = isWatchLater(p.name);
-      const item = p;
+      const item = p; // capture for closure
       const row = h('div', { class: 'yti-file-row' }, [
         h('span', null, [
           (wl ? '⏱ ' : '📁 ') + p.name,
